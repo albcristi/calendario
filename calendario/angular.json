@@ -3,5 +3,37 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-  }
+    "calendario": {
+      "projectType": "library",
+      "root": "projects/calendario",
+      "sourceRoot": "projects/calendario/src",
+      "prefix": "cda",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/calendario/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/calendario/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/calendario/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/calendario/src/test.ts",
+            "tsConfig": "projects/calendario/tsconfig.spec.json",
+            "karmaConfig": "projects/calendario/karma.conf.js"
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "calendario"
 }
