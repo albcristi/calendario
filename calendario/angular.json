@@ -33,6 +33,104 @@
           }
         }
       }
+    },
+    "calendario-example": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
+      "root": "projects/calendario-example",
+      "sourceRoot": "projects/calendario-example/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/calendario-example",
+            "index": "projects/calendario-example/src/index.html",
+            "main": "projects/calendario-example/src/main.ts",
+            "polyfills": "projects/calendario-example/src/polyfills.ts",
+            "tsConfig": "projects/calendario-example/tsconfig.app.json",
+            "assets": [
+              "projects/calendario-example/src/favicon.ico",
+              "projects/calendario-example/src/assets"
+            ],
+            "styles": [
+              "projects/calendario-example/src/styles.css"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "projects/calendario-example/src/environments/environment.ts",
+                  "with": "projects/calendario-example/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "calendario-example:build:production"
+            },
+            "development": {
+              "browserTarget": "calendario-example:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "calendario-example:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/calendario-example/src/test.ts",
+            "polyfills": "projects/calendario-example/src/polyfills.ts",
+            "tsConfig": "projects/calendario-example/tsconfig.spec.json",
+            "karmaConfig": "projects/calendario-example/karma.conf.js",
+            "assets": [
+              "projects/calendario-example/src/favicon.ico",
+              "projects/calendario-example/src/assets"
+            ],
+            "styles": [
+              "projects/calendario-example/src/styles.css"
+            ],
+            "scripts": []
+          }
+        }
+      }
     }
   },
   "defaultProject": "calendario"
