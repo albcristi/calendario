@@ -1,0 +1,2 @@
+# calendario
+Angular calendar component
