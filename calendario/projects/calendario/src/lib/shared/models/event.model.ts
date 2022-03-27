@@ -1,6 +1,6 @@
 import {DateUtils} from "../utils/date.utils";
 
-export class EventModel {
+export class EventItem {
   originalEvent: any;
   start: Date;
   end: Date;
