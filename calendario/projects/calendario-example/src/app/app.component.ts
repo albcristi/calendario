@@ -8,6 +8,11 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'calendario-example';
 
+  constructor() {
+    console.log("AAA")
+    console.log(this.myGetEvents(new Date()));
+  }
+
   myAddEvent = (item: any): void => {
     console.log('provided add function')
     console.log(item);
@@ -22,5 +27,24 @@ export class AppComponent {
   myUpdateEvent = (item: any): void => {
     console.log('provided update function')
     console.log(item);
+  }
+
+  myGetEvents = (referenceMonth: Date): any => {
+    let events = [];
+    let referenceDay = new Date()
+    referenceDay.setMonth(referenceMonth.getMonth());
+    referenceDay.setDate(1);
+    let noEvents = 8
+    let eventTitles = ["Daily Meet.", "Call Mother", "Go to gym", "Do laundry", "Buy milk"]
+    while (noEvents > 0){
+      let startTime = new Date(referenceDay);
+      let endTime =new Date(referenceDay);
+      endTime.setHours(referenceDay.getHours()+1);
+      events.push({startTime: startTime, endTime: endTime, title: eventTitles[noEvents>4 ? noEvents%4 : noEvents]});
+      referenceDay = new Date(referenceDay);
+      referenceDay.setDate(Math.random() * (25 - 1) + 1)
+      noEvents--;
+    }
+    return events;
   }
 }

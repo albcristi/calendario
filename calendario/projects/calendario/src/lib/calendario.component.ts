@@ -23,7 +23,7 @@ import {CalendarUtils} from "./shared/utils/calendar.utils";
         <li *ngFor="let day of week">
           <div class="header-day">
             <div>
-              {{day.toLocaleDateString(undefined, {day: 'numeric'})}}
+             {{day.toLocaleDateString(undefined, {day: 'numeric'})}}
             </div>
             <div>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-plus-circle" viewBox="0 0 16 16">
@@ -48,7 +48,7 @@ import {CalendarUtils} from "./shared/utils/calendar.utils";
   ]
 })
 export class CalendarioComponent implements OnInit {
-   @Input() events: any;
+   @Input() getEvents: any;
    @Input() deleteEvent: any;
    @Input() deleteArguments: any;
    @Input() addEvent: any;
@@ -59,13 +59,14 @@ export class CalendarioComponent implements OnInit {
    calendarDates: Array<Array<Date>> = [];
    days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
    referenceDay = new Date();
+   monthlyEvents: Array<EventItem> = [];
   constructor() { }
 
   ngOnInit(): void {
     this.addParameters = this.initFunctionArguments(this.addParameters);
     this.deleteArguments = this.initFunctionArguments(this.deleteArguments);
     this.updateParameters = this.initFunctionArguments(this.updateParameters);
-    this.events = this.transformReceivedEvents(this.events);
+    this.monthlyEvents = this.transformReceivedEvents(this.getEvents(this.referenceDay));
     let calendarDatesNotTransformed = CalendarUtils.getCalendarDays(this.referenceDay);
     this.calendarDates = this.groupDaysToWeeks(calendarDatesNotTransformed);
   }
