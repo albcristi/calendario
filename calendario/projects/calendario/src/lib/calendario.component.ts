@@ -59,7 +59,7 @@ export class CalendarioComponent implements OnInit {
    calendarDates: Array<Array<Date>> = [];
    days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
    referenceDay = new Date();
-   monthlyEvents: Array<EventItem> = [];
+   monthlyEvents: Map<number, Array<EventItem>> = new Map<number, Array<EventItem>>();
   constructor() { }
 
   ngOnInit(): void {
@@ -67,9 +67,11 @@ export class CalendarioComponent implements OnInit {
     this.deleteArguments = this.initFunctionArguments(this.deleteArguments);
     this.updateParameters = this.initFunctionArguments(this.updateParameters);
     this.monthlyEvents = this.transformReceivedEvents(this.getEvents(this.referenceDay));
+    console.log(this.monthlyEvents);
     let calendarDatesNotTransformed = CalendarUtils.getCalendarDays(this.referenceDay);
     this.calendarDates = this.groupDaysToWeeks(calendarDatesNotTransformed);
   }
+
 
   groupDaysToWeeks(calendarDatesNotTransformed: Array<Date>){
     let numberWeeks = calendarDatesNotTransformed.length / 7;
@@ -100,12 +102,26 @@ export class CalendarioComponent implements OnInit {
     return originalArgument;
   }
 
-  transformReceivedEvents(eventsArray: any[]): EventItem[] {
+  transformReceivedEvents(eventsArray: any[]) {
     if(eventsArray === undefined || eventsArray === null) {
-      return []
+      return new Map();
     }
-    return eventsArray.filter((element: any) => EventValidator.validate(element))
+    console.log(eventsArray)
+    eventsArray =  eventsArray.filter((element: any) => EventValidator.validate(element))
       .map((element: any) => new EventItem(element))
+    let mapOfEvents = new Map();
+    console.log(eventsArray)
+    eventsArray.forEach(eventItem => {
+      let date = new Date(eventItem.start);
+      date.setHours(0); date.setMilliseconds(0); date.setMinutes(0);
+      let timestamp = date.getTime()
+      if(mapOfEvents.get(timestamp) !== undefined)
+        mapOfEvents.get(timestamp).push(eventItem)
+      else {
+        mapOfEvents.set(timestamp, [eventItem])
+      }
+    })
+    return mapOfEvents;
   }
 
   setMonth(inc: number) {

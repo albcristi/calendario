@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -9,8 +10,6 @@ export class AppComponent {
   title = 'calendario-example';
 
   constructor() {
-    console.log("AAA")
-    console.log(this.myGetEvents(new Date()));
   }
 
   myAddEvent = (item: any): void => {
@@ -40,7 +39,7 @@ export class AppComponent {
       let startTime = new Date(referenceDay);
       let endTime =new Date(referenceDay);
       endTime.setHours(referenceDay.getHours()+1);
-      events.push({startTime: startTime, endTime: endTime, title: eventTitles[noEvents>4 ? noEvents%4 : noEvents]});
+      events.push( {startDate: startTime,endDate: endTime, title: eventTitles[noEvents>4 ? noEvents%4 : noEvents]});
       referenceDay = new Date(referenceDay);
       referenceDay.setDate(Math.random() * (25 - 1) + 1)
       noEvents--;
