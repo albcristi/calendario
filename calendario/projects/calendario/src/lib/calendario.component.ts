@@ -19,6 +19,11 @@ import {CalendarUtils} from "./shared/utils/calendar.utils";
       <ul class="weekdays">
         <li *ngFor="let day of this.days">{{day}}</li>
       </ul>
+      <div class="week" *ngFor="let week of this.calendarDates">
+        <li *ngFor="let day of week">
+          {{day.toLocaleDateString()}}
+        </li>
+      </div>
     </div>
   `,
   styles: [
@@ -33,10 +38,9 @@ export class CalendarioComponent implements OnInit {
    @Input() updateEvent: any;
    @Input() updateParameters: any;
 
-   calendarDates: Array<Date> = [];
+   calendarDates: Array<Array<Date>> = [];
    days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
    referenceDay = new Date();
-
   constructor() { }
 
   ngOnInit(): void {
@@ -44,8 +48,26 @@ export class CalendarioComponent implements OnInit {
     this.deleteArguments = this.initFunctionArguments(this.deleteArguments);
     this.updateParameters = this.initFunctionArguments(this.updateParameters);
     this.events = this.transformReceivedEvents(this.events);
-    this.calendarDates = CalendarUtils.getCalendarDays(this.referenceDay);
-    console.log(this.calendarDates);
+    let calendarDatesNotTransformed = CalendarUtils.getCalendarDays(this.referenceDay);
+    this.calendarDates = this.groupDaysToWeeks(calendarDatesNotTransformed);
+    console.log(this.calendarDates)
+  }
+
+  groupDaysToWeeks(calendarDatesNotTransformed: Array<Date>){
+    let numberWeeks = calendarDatesNotTransformed.length / 7;
+    let index = 0;
+    let result = []
+    while (index < numberWeeks){
+      let slice = this.getSliceFromArray(calendarDatesNotTransformed, index);
+      result.push(slice);
+      index++;
+    }
+
+    return result;
+  }
+
+  getSliceFromArray(arr: Array<Date>, slice: number) {
+    return  arr.slice(slice*7, (slice+1)*7)
   }
 
   initFunctionArguments(originalArgument: any): any[] {
@@ -66,7 +88,7 @@ export class CalendarioComponent implements OnInit {
   setMonth(inc: number) {
     const [year, month] = [this.referenceDay.getFullYear(), this.referenceDay.getMonth()];
     this.referenceDay = new Date(year, month + inc, 1);
-    this.calendarDates = CalendarUtils.getCalendarDays(this.referenceDay);
+    this.calendarDates = this.groupDaysToWeeks(CalendarUtils.getCalendarDays(this.referenceDay));
   }
 
 }
