@@ -62,7 +62,7 @@ body {font-family: Verdana, sans-serif;}
 .header-day {
   display: flex;
   justify-content: space-around;
-  margin-bottom: 0.5vh;
+  margin-bottom: 1.5vh;
 }
 
 .day-event {
@@ -71,3 +71,9 @@ body {font-family: Verdana, sans-serif;}
   margin-bottom: 0.5vh;
   margin-right: 0.5vw;
 }
+
+.weekdays-container {
+  display: flex;
+  width: 100%;
+}
+

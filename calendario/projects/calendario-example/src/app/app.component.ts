@@ -17,10 +17,11 @@ export class AppComponent {
     console.log(item);
   }
 
-  myDeleteEvent = (item: any, arg1: any): void => {
+  myDeleteEvent = (item: any, arg1: any): boolean => {
     console.log('provided delete function')
     console.log(item);
     console.log(arg1)
+    return true;
   }
 
   myUpdateEvent = (item: any): void => {

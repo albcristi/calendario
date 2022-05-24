@@ -1,0 +1,19 @@
+.event-item-header {
+  display: flex;
+  justify-content: space-around;
+}
+
+.event-item-container {
+  margin-top: 0.5vh;
+  border: 1px solid #dddddd;
+  padding: 1%;
+  width: 90%;
+  border-radius: 20px;
+}
+
+.event-item-body-container {
+  display: flex;
+  margin-top: 0.5vh;
+  padding: 1%;
+  justify-content: center;
+}

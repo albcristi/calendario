@@ -20,27 +20,27 @@ import {CalendarUtils} from "./shared/utils/calendar.utils";
         <li *ngFor="let day of this.days">{{day}}</li>
       </ul>
       <div class="week" *ngFor="let week of this.calendarDates">
-        <li *ngFor="let day of week">
-          <div class="header-day">
-            <div>
-             {{day.toLocaleDateString(undefined, {day: 'numeric'})}}
+        <ul class="weekdays-container">
+          <li class="day-event-container-outside" *ngFor="let day of week">
+            <div class="header-day">
+              <div>
+               {{day.toLocaleDateString(undefined, {day: 'numeric'})}}
+              </div>
+              <div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                </svg>
+              </div>
             </div>
-            <div>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-plus-circle" viewBox="0 0 16 16">
-                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-              </svg>
+            <div class="day-events">
+                  <div *ngFor="let eventOfCurrentDay of monthlyEvents.get(getDateAtHourZeroZero(day).getTime())">
+                    <cda-calendar-item [eventItem]="eventOfCurrentDay"
+                                       (removeEventItem)="removeEventFromMonthlyEvents($event)"></cda-calendar-item>
+                  </div>
             </div>
-          </div>
-          <div class="day-events">
-            <div class="day-event">
-              day
-            </div>
-            <div class="day-event">
-              day
-            </div>
-          </div>
-        </li>
+          </li>
+        </ul>
       </div>
     </div>
   `,
@@ -72,6 +72,14 @@ export class CalendarioComponent implements OnInit {
     this.calendarDates = this.groupDaysToWeeks(calendarDatesNotTransformed);
   }
 
+  getDateAtHourZeroZero(day: Date): Date{
+    day.setMinutes(0);
+    day.setHours(0);
+    day.setSeconds(0);
+    day.setMilliseconds(0);
+    return day;
+  }
+
 
   groupDaysToWeeks(calendarDatesNotTransformed: Array<Date>){
     let numberWeeks = calendarDatesNotTransformed.length / 7;
@@ -91,6 +99,7 @@ export class CalendarioComponent implements OnInit {
     return result;
   }
 
+
   getSliceFromArray(arr: Array<Date>, slice: number) {
     return  arr.slice(slice*7, (slice+1)*7)
   }
@@ -104,19 +113,20 @@ export class CalendarioComponent implements OnInit {
 
   transformReceivedEvents(eventsArray: any[]) {
     if(eventsArray === undefined || eventsArray === null) {
-      return new Map();
+      return new Map<number, Array<EventItem>>();
     }
     console.log(eventsArray)
     eventsArray =  eventsArray.filter((element: any) => EventValidator.validate(element))
       .map((element: any) => new EventItem(element))
-    let mapOfEvents = new Map();
+    let mapOfEvents = new Map<number, Array<EventItem>>();
     console.log(eventsArray)
     eventsArray.forEach(eventItem => {
-      let date = new Date(eventItem.start);
-      date.setHours(0); date.setMilliseconds(0); date.setMinutes(0);
+      let date =this.getDateAtHourZeroZero(new Date(eventItem.start));
       let timestamp = date.getTime()
-      if(mapOfEvents.get(timestamp) !== undefined)
-        mapOfEvents.get(timestamp).push(eventItem)
+      if(mapOfEvents.has(timestamp))
+        { // @ts-ignore
+          mapOfEvents.get(timestamp).push(eventItem)
+        }
       else {
         mapOfEvents.set(timestamp, [eventItem])
       }
@@ -130,6 +140,19 @@ export class CalendarioComponent implements OnInit {
     this.calendarDates = this.groupDaysToWeeks(CalendarUtils.getCalendarDays(this.referenceDay));
   }
 
+  removeEventFromMonthlyEvents(event: EventItem): boolean {
+    console.log("CALENDARIO - DELETE EVENT")
+    if(this.deleteEvent(event?.originalEvent.id, this.deleteArguments)){
+      let day = new Date(event.start);
+      day.setHours(0); day.setMinutes(0); day.setSeconds(0); day.setMilliseconds(0);
+      let events = this.monthlyEvents.get(day.getTime());
+      this.monthlyEvents.delete(day.getTime());
+      // @ts-ignore
+      this.monthlyEvents.set(day.getTime(),events.filter(e => e.originalEvent.id !== event.originalEvent.id));
+      return true;
+    }
+    return false;
+  }
 }
 
 // add/delete/update provided function has at least two params: item (an envent), callbackFunction
