@@ -9,6 +9,7 @@ import {EventItem} from "../../shared/models/event.model";
 export class CalendarItemComponent implements OnInit {
 
   @Input() eventItem: EventItem | undefined;
+  @Input() getEventItemFields: any;
   @Output() removeEventItem = new EventEmitter<EventItem>();
 
   constructor() { }

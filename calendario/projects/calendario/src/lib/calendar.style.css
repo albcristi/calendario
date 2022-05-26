@@ -1,3 +1,5 @@
+
+
 ul {list-style-type: none;}
 body {font-family: Verdana, sans-serif;}
 
@@ -77,3 +79,13 @@ body {font-family: Verdana, sans-serif;}
   width: 100%;
 }
 
+.my-dialog{
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 40px;
+}

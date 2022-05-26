@@ -47,4 +47,12 @@ export class AppComponent {
     }
     return events;
   }
+
+  getEventItemFields = () => {
+    return [
+      {key: 'title', value: 'string'},
+      {key: 'description', value: 'string'},
+      {key: 'price', value: 'number'}
+    ]
+  }
 }

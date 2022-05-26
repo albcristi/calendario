@@ -58,7 +58,8 @@
               "projects/calendario-example/src/assets"
             ],
             "styles": [
-              "projects/calendario-example/src/styles.css"
+              "projects/calendario-example/src/styles.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
             "scripts": []
           },
@@ -125,7 +126,8 @@
               "projects/calendario-example/src/assets"
             ],
             "styles": [
-              "projects/calendario-example/src/styles.css"
+              "projects/calendario-example/src/styles.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
             "scripts": []
           }

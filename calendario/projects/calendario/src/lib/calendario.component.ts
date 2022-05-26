@@ -2,12 +2,13 @@ import {Component, Input, OnInit} from '@angular/core';
 import {EventValidator} from "./shared/validators/event.validator";
 import {EventItem} from "./shared/models/event.model";
 import {CalendarUtils} from "./shared/utils/calendar.utils";
+import {AddUpdateModalComponent} from "./views/add-modal/add-update-modal.component";
 
 
 @Component({
   selector: 'cda-calendario',
   styleUrls: ['./calendar.style.css'],
-  template: `
+    template: `
     <div>
       <div class="month">
         <ul>
@@ -27,15 +28,17 @@ import {CalendarUtils} from "./shared/utils/calendar.utils";
                {{day.toLocaleDateString(undefined, {day: 'numeric'})}}
               </div>
               <div>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-plus-circle" viewBox="0 0 16 16">
-                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                </svg>
+                <cda-add-update-modal
+                  [getEventItemFields]="getEventFields"
+                  [dayOfEvent]="day"
+                  [modalTitle]="'New Event'">
+                </cda-add-update-modal>
               </div>
             </div>
             <div class="day-events">
                   <div *ngFor="let eventOfCurrentDay of monthlyEvents.get(getDateAtHourZeroZero(day).getTime())">
                     <cda-calendar-item [eventItem]="eventOfCurrentDay"
+                                       [getEventItemFields]="getEventFields"
                                        (removeEventItem)="removeEventFromMonthlyEvents($event)"></cda-calendar-item>
                   </div>
             </div>
@@ -45,10 +48,12 @@ import {CalendarUtils} from "./shared/utils/calendar.utils";
     </div>
   `,
   styles: [
-  ]
+  ],
+  entryComponents: [AddUpdateModalComponent]
 })
 export class CalendarioComponent implements OnInit {
    @Input() getEvents: any;
+   @Input() getEventItemFields: any;
    @Input() deleteEvent: any;
    @Input() deleteArguments: any;
    @Input() addEvent: any;
@@ -67,7 +72,6 @@ export class CalendarioComponent implements OnInit {
     this.deleteArguments = this.initFunctionArguments(this.deleteArguments);
     this.updateParameters = this.initFunctionArguments(this.updateParameters);
     this.monthlyEvents = this.transformReceivedEvents(this.getEvents(this.referenceDay));
-    console.log(this.monthlyEvents);
     let calendarDatesNotTransformed = CalendarUtils.getCalendarDays(this.referenceDay);
     this.calendarDates = this.groupDaysToWeeks(calendarDatesNotTransformed);
   }
@@ -141,7 +145,6 @@ export class CalendarioComponent implements OnInit {
   }
 
   removeEventFromMonthlyEvents(event: EventItem): boolean {
-    console.log("CALENDARIO - DELETE EVENT")
     if(this.deleteEvent(event?.originalEvent.id, this.deleteArguments)){
       let day = new Date(event.start);
       day.setHours(0); day.setMinutes(0); day.setSeconds(0); day.setMilliseconds(0);
@@ -153,6 +156,11 @@ export class CalendarioComponent implements OnInit {
     }
     return false;
   }
+
+  getEventFields = () => {
+    return this.getEventItemFields();
+  }
+
 }
 
 // add/delete/update provided function has at least two params: item (an envent), callbackFunction
