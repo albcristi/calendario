@@ -6,7 +6,7 @@ import { AddUpdateModalComponent } from './views/add-modal/add-update-modal.comp
 import {MatDialogModule} from "@angular/material/dialog";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {NgbDatepickerModule, NgbModule} from "@ng-bootstrap/ng-bootstrap";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -17,7 +17,8 @@ import {ReactiveFormsModule} from "@angular/forms";
   imports: [
     BrowserModule,
     NgbModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
   ],
   exports: [
     CalendarioComponent

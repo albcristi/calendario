@@ -14,24 +14,48 @@ export class AddUpdateModalComponent implements OnInit{
   @Input() dayOfEvent: Date | undefined;
   @Input() modalTitle: string | undefined;
   @Input() getEventItemFields: any;
-  editEventForm: FormGroup;
+  modelObject = {};
 
-  constructor(public modalService: NgbModal, public formBuilder: FormBuilder) {
-    this.editEventForm = formBuilder.group({});
+  constructor(public modalService: NgbModal) {
   }
 
   ngOnInit(): void {
-    this.editEventForm = this.formBuilder.group(this.getFormControlsConfig())
+    this.constructObjectModel();
   }
 
-  getFormControlsConfig() {
-    let controlsConfig = {};
-    this.getEventItemFields().forEach((element: { key: string | number; }) => {
-      // @ts-ignore
-      controlsConfig[element.key] = '';
-    })
-    return controlsConfig;
+
+  getValueForField(field: {key: string, value: string, actualValue: string | number | Date | undefined}) {
+    if(field.value === "string")
+      return '';
+    return '0';
   }
+
+  constructObjectModel() {
+    let start = new Date(); start.setHours(7); start.setMinutes(0); start.setSeconds(0);
+    let end = new Date(); end.setHours(8); end.setMinutes(0); end.setSeconds(0);
+    // @ts-ignore
+    this.modelObject["start"] = start;
+    // @ts-ignore
+    this.modelObject["end"] = end;
+    this.getEventItemFields()
+      .forEach((field: {key: string, value: string, actualValue: string | number | Date | undefined}) => {
+        if(field.actualValue !== undefined)
+          { // @ts-ignore
+            this.modelObject[field.key] = field.actualValue;
+          }
+        else {
+          if(field.value === "number") {
+            // @ts-ignore
+            this.modelObject[field.key] = 0
+          }
+          else {
+            // @ts-ignore
+            this.modelObject[field.key] = '';
+          }
+        }
+      })
+  }
+
   openModal(content: any){
     this.modalService.open(content)
     console.log(this.getEventItemFields())
@@ -46,9 +70,21 @@ export class AddUpdateModalComponent implements OnInit{
     return key.charAt(0).toUpperCase() + key.slice(1);
   }
 
+  valueChangedInModal(field: { key: string, value: string }, value: string | number | Date | any) {
+    // @ts-ignore
+    // event.preventDefault()
+    console.log(field)
+    console.log(value);
+  }
+
   getFieldType(value: string) {
     if(value === "string")
       return "text"
     return "number"
+  }
+
+  getPlaceholder(key: string): String {
+    // @ts-ignore
+    return String(this.modelObject[key]);
   }
 }
