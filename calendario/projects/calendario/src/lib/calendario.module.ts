@@ -7,6 +7,7 @@ import {MatDialogModule} from "@angular/material/dialog";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {NgbDatepickerModule, NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {MatInputModule} from "@angular/material/input";
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
     BrowserModule,
     NgbModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    MatInputModule
   ],
   exports: [
     CalendarioComponent

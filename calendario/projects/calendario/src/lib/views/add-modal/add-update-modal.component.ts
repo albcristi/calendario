@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
@@ -27,7 +27,7 @@ export class AddUpdateModalComponent implements OnInit{
   getValueForField(field: {key: string, value: string, actualValue: string | number | Date | undefined}) {
     if(field.value === "string")
       return '';
-    return '0';
+    return 0;
   }
 
   constructObjectModel() {
@@ -70,12 +70,6 @@ export class AddUpdateModalComponent implements OnInit{
     return key.charAt(0).toUpperCase() + key.slice(1);
   }
 
-  valueChangedInModal(field: { key: string, value: string }, value: string | number | Date | any) {
-    // @ts-ignore
-    // event.preventDefault()
-    console.log(field)
-    console.log(value);
-  }
 
   getFieldType(value: string) {
     if(value === "string")
@@ -86,5 +80,14 @@ export class AddUpdateModalComponent implements OnInit{
   getPlaceholder(key: string): String {
     // @ts-ignore
     return String(this.modelObject[key]);
+  }
+
+  tryAndSaveEventItem() {
+    this.getEventItemFields()
+      .forEach((fieldData: {key: string}) => {
+        console.log(fieldData.key)
+        console.log((<HTMLInputElement> document.getElementById(fieldData.key)).value)
+      })
+    console.log((<HTMLInputElement> document.getElementById("startTime")).valueAsDate)
   }
 }
