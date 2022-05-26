@@ -42,4 +42,13 @@ export class AddUpdateModalComponent implements OnInit{
     console.log("CLOSE")
   }
 
+  getFieldName(key: string) {
+    return key.charAt(0).toUpperCase() + key.slice(1);
+  }
+
+  getFieldType(value: string) {
+    if(value === "string")
+      return "text"
+    return "number"
+  }
 }
