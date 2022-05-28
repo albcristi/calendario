@@ -47,15 +47,15 @@
                    id="{{field.key}}" type="{{getFieldType(field.value)}}">
           </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="showErrorMessage=false; stepOfCreation=1; modal.dismiss()">Close</button>
-          <button type="button" class="btn btn-primary" (click)="tryAndSaveEventItem(); modal.dismiss()">Save</button>
+        <div class="modal-footer" style="margin-top: 1vh">
+          <button type="button" class="btn btn-outline-dark" (click)="showErrorMessage=false; stepOfCreation=1; modal.dismiss()">Close</button>
+          <button type="button" class="btn btn-outline-success" (click)="tryAndSaveEventItem(); modal.dismiss()">Save</button>
         </div>
       </div>
 
-      <div *ngIf="stepOfCreation===1"  class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="showErrorMessage=false; stepOfCreation=1; modal.dismiss()">Close</button>
-        <button type="button" class="btn btn-primary" [disabled]="showErrorMessage || !hasSomeInput" (click)="saveEveStartAndEnd()">Next</button>
+      <div *ngIf="stepOfCreation===1" style="margin-top: 1vh"  class="modal-footer">
+        <button  type="button" class="btn btn-outline-dark" (click)="showErrorMessage=false; stepOfCreation=1; modal.dismiss()">Close</button>
+        <button  type="button" class="btn btn-outline-primary" [disabled]="showErrorMessage || !hasSomeInput" (click)="saveEveStartAndEnd()">Next</button>
       </div>
   </div>
 </ng-template>

@@ -1,8 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {EventValidator} from "./shared/validators/event.validator";
 import {EventItem} from "./shared/models/event.model";
 import {CalendarUtils} from "./shared/utils/calendar.utils";
 import {AddUpdateModalComponent} from "./views/add-modal/add-update-modal.component";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 
 @Component({
@@ -48,6 +49,20 @@ import {AddUpdateModalComponent} from "./views/add-modal/add-update-modal.compon
           </li>
         </ul>
       </div>
+      <ng-template #modalInfo let-modal>
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal-basic-title">{{toastTitle}}</h4>
+          <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click');"></button>
+        </div>
+        <div class="modal-body">
+          <p>{{toastMessage}}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss()">
+            OK
+          </button>
+        </div>
+      </ng-template>
     </div>
   `,
   styles: [
@@ -64,11 +79,17 @@ export class CalendarioComponent implements OnInit {
    @Input() updateEvent: any;
    @Input() updateParameters: any;
 
+   @ViewChild('modalInfo') modalInfo: TemplateRef<any> | any;
+
    calendarDates: Array<Array<Date>> = [];
    days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
    referenceDay = new Date();
    monthlyEvents: Map<number, Array<EventItem>> = new Map<number, Array<EventItem>>();
-  constructor() { }
+   showToast=false;
+   toastTitle='';
+   toastMessage='';
+
+   constructor(public modalService: NgbModal) { }
 
   ngOnInit(): void {
     this.addParameters = this.initFunctionArguments(this.addParameters);
@@ -158,6 +179,11 @@ export class CalendarioComponent implements OnInit {
       this.monthlyEvents.set(day.getTime(),events.filter(e => e.originalEvent.id !== event.originalEvent.id));
       return true;
     }
+    else {
+      this.toastMessage = 'Failed to delete event: '+event.originalEvent.title;
+      this.toastTitle = "Action failed"
+      this.modalService.open(this.modalInfo);
+    }
     return false;
   }
 
@@ -173,6 +199,9 @@ export class CalendarioComponent implements OnInit {
     }
     else {
       console.log("ADD FAILED")
+      this.toastMessage = 'Failed to add event: '+newEventObject.title;
+      this.toastTitle = "Action failed"
+      this.modalService.open(this.modalInfo);
     }
   }
 
@@ -183,7 +212,9 @@ export class CalendarioComponent implements OnInit {
       console.log("EDIT SUCCESS")
     }
     else {
-      console.log("EDIT FAILED")
+      this.toastMessage = 'Failed to update event: '+edittedEventJson.title;
+      this.toastTitle = "Action failed"
+      this.modalService.open(this.modalInfo);
     }
   }
 }
