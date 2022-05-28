@@ -14,6 +14,7 @@ export class AddUpdateModalComponent implements OnInit{
   @Input() modalTitle: string | undefined;
   @Input() getEventItemFields: any;
   @Input() isAdd: boolean | undefined;
+  @Input() originalEvent: EventItem | undefined;
   @Output() retrieveCreatedData = new EventEmitter<string>();
   modelObject = {};
   showErrorMessage = false;
@@ -44,9 +45,9 @@ export class AddUpdateModalComponent implements OnInit{
     this.modelObject["end"] = end;
     this.getEventItemFields()
       .forEach((field: {key: string, value: string, actualValue: string | number | Date | undefined}) => {
-        if(field.actualValue !== undefined)
+        if(!this.isAdd)
           { // @ts-ignore
-            this.modelObject[field.key] = field.actualValue;
+            this.modelObject[field.key] = String(this.originalEvent?.originalEvent[field.key]);
           }
         else {
           if(field.value === "number") {
@@ -111,7 +112,7 @@ export class AddUpdateModalComponent implements OnInit{
       return field.value === "number" ? Number(originalValue) : originalValue;
     if(field.value === "number")
       if(isNaN(Number(textValue)))
-        return -1
+        return NaN
       else
         return Number(textValue);
     return textValue;
