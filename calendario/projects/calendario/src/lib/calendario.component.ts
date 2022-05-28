@@ -193,9 +193,22 @@ export class CalendarioComponent implements OnInit {
 
   saveNewEventItem(eventJsonString: string) {
     let newEventObject = JSON.parse(eventJsonString);
-    console.log("Recevied", newEventObject)
-    if(this.addEvent(eventJsonString, this.addParameters)){
-      console.log("ADD SUCCESS")
+    newEventObject["id"] = new Date().getTime();
+    let createdEvent = this.addEvent(newEventObject, this.addParameters);
+    console.log("REC AD", createdEvent)
+    if(createdEvent !== null && createdEvent !== undefined){
+      let event = this.getEventItem(createdEvent);
+      let day = new Date(event.start);
+      day.setHours(0); day.setMinutes(0); day.setSeconds(0); day.setMilliseconds(0);
+      let events = this.monthlyEvents.get(day.getTime());
+      console.log("RECEIVED ADD", createdEvent);
+      if(events === undefined || events === null || events === [])
+        events = [event];
+      else
+        { // @ts-ignore
+          events = [...events|event]
+        }
+      this.monthlyEvents.set(day.getTime(), events);
       this.toastMessage = 'Added event: '+newEventObject.title;
       this.toastTitle = "Action status"
     }
@@ -207,10 +220,33 @@ export class CalendarioComponent implements OnInit {
     this.modalService.open(this.modalInfo);
   }
 
+  getEventItem(event: any): EventItem{
+     let evIt = new EventItem(null);
+     evIt.start = new Date(event.startDate);
+     evIt.end = new Date(event.endDate);
+     evIt.originalEvent = event;
+     return evIt;
+  }
+
   updateEventItem(eventItemAsJsonString: string) {
     let edittedEventJson = JSON.parse(eventItemAsJsonString)
-    console.log("RECEIVED EDIT", edittedEventJson);
-    if(this.updateEvent(edittedEventJson, this.updateParameters)){
+    let createdEvent = this.updateEvent(edittedEventJson, this.updateParameters);
+    console.log("RECEIVED EDIT", createdEvent);
+    if(createdEvent !== null){
+      let day = new Date(createdEvent.startDate);
+      day.setHours(0); day.setMinutes(0); day.setSeconds(0); day.setMilliseconds(0);
+      let events = this.monthlyEvents.get(day.getTime());
+      this.monthlyEvents.delete(day.getTime())
+      let event = this.getEventItem(createdEvent);
+      console.log("RECEIVED EDIT", event);
+      // @ts-ignore
+      console.log("EDIT EVS", events)
+      console.log(event);
+      // @ts-ignore
+      events = events.filter(ev => ev.originalEvent.id !== event.originalEvent.id);
+      events.push(event)
+      // @ts-ignore
+      this.monthlyEvents.set(day.getTime(), events)
       this.toastMessage = 'Updated event: '+edittedEventJson.title;
       this.toastTitle = "Action status"
     }

@@ -38,7 +38,9 @@ export class CalendarItemComponent implements OnInit {
   }
 
   handleEventEdit(eventAsJsonString: string) {
-    this.editEventItem.emit(eventAsJsonString);
+    let intermediaryJSON = JSON.parse(eventAsJsonString);
+    intermediaryJSON.id = this.eventItem?.originalEvent.id;
+    this.editEventItem.emit(JSON.stringify(intermediaryJSON));
   }
 
   getDayOfTheEvent(): Date {

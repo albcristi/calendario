@@ -12,23 +12,23 @@ export class AppComponent {
   constructor() {
   }
 
-  myAddEvent = (item: any, args: any): boolean => {
+  myAddEvent = (item: any, args: any): any => {
     console.log('provided add function')
     console.log(item);
-    return false;
+    return item;
   }
 
   myDeleteEvent = (item: any, arg1: any): boolean => {
     console.log('provided delete function')
     console.log(item);
     console.log(arg1)
-    return false
+    return Math.random() > 0.5
   }
 
-  myUpdateEvent = (item: any, args: any): boolean => {
+  myUpdateEvent = (item: any, args: any): any => {
     console.log('provided update function')
     console.log(item);
-    return false;
+    return item;
   }
 
   myGetEvents = (referenceMonth: Date): any => {

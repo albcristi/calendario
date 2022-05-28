@@ -6,12 +6,14 @@ import { AddUpdateModalComponent } from './views/add-modal/add-update-modal.comp
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
+import { MyCalendarEventComponent } from './views/my-calendar-event/my-calendar-event.component';
 
 @NgModule({
   declarations: [
     CalendarioComponent,
     CalendarItemComponent,
-    AddUpdateModalComponent
+    AddUpdateModalComponent,
+    MyCalendarEventComponent
   ],
   imports: [
     BrowserModule,
