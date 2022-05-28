@@ -35,4 +35,14 @@ export class CalendarItemComponent implements OnInit {
   handleRemove() {
     this.removeEventItem.emit(this.eventItem);
   }
+
+  handleEventEdit(eventAsJsonString: string) {
+    console.log(eventAsJsonString);
+  }
+
+  getDayOfTheEvent(): Date {
+    if(this.eventItem === undefined || this.eventItem.start === undefined)
+      return new Date()
+    return this.eventItem.start;
+  }
 }

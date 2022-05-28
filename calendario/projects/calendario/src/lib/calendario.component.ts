@@ -29,9 +29,11 @@ import {AddUpdateModalComponent} from "./views/add-modal/add-update-modal.compon
               </div>
               <div>
                 <cda-add-update-modal
+                  [isAdd]="true"
                   [getEventItemFields]="getEventFields"
                   [dayOfEvent]="day"
-                  [modalTitle]="'New Event'">
+                  [modalTitle]="'New Event'"
+                  (retrieveCreatedData)="saveNewEventItem($event)">
                 </cda-add-update-modal>
               </div>
             </div>
@@ -159,6 +161,11 @@ export class CalendarioComponent implements OnInit {
 
   getEventFields = () => {
     return this.getEventItemFields();
+  }
+
+  saveNewEventItem(eventJsonString: string) {
+    let newEventObject = JSON.parse(eventJsonString);
+    console.log("RECEIVED", newEventObject)
   }
 
 }

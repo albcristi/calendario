@@ -3,6 +3,14 @@
     <div>
       {{getTitleMinimized(eventItem?.originalEvent.title)}}
     </div>
+    <cda-add-update-modal
+      [isAdd]="false"
+      [getEventItemFields]="getEventItemFields"
+      [dayOfEvent]="getDayOfTheEvent()"
+      [modalTitle]="'Edit Event'"
+      (retrieveCreatedData)="handleEventEdit($event)"
+    >
+    </cda-add-update-modal>
     <div>
       <svg
         (click)="handleRemove()"

@@ -1,6 +1,7 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {EventItem} from "../../shared/models/event.model";
 
 @Component({
   selector: 'cda-add-update-modal',
@@ -12,6 +13,8 @@ export class AddUpdateModalComponent implements OnInit{
   @Input() dayOfEvent: Date | undefined;
   @Input() modalTitle: string | undefined;
   @Input() getEventItemFields: any;
+  @Input() isAdd: boolean | undefined;
+  @Output() retrieveCreatedData = new EventEmitter<string>();
   modelObject = {};
   showErrorMessage = false;
   stepOfCreation = 1;
@@ -100,7 +103,7 @@ export class AddUpdateModalComponent implements OnInit{
     newObject['startDate'] = this.modelObject['startDate'];
     // @ts-ignore
     newObject['endDate'] = this.modelObject['endDate'];
-    console.log('new object', newObject)
+    this.retrieveCreatedData.emit(JSON.stringify(newObject));
   }
 
   getValueOfElementFromField(field: {key: string, value: string}, textValue: string, originalValue: string): number | string {
