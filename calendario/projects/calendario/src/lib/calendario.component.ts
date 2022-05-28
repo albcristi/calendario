@@ -169,7 +169,7 @@ export class CalendarioComponent implements OnInit {
     this.monthlyEvents = this.transformReceivedEvents(this.getEvents(this.referenceDay));
   }
 
-  removeEventFromMonthlyEvents(event: EventItem): boolean {
+  removeEventFromMonthlyEvents(event: EventItem) {
     if(this.deleteEvent(event?.originalEvent.id, this.deleteArguments)){
       let day = new Date(event.start);
       day.setHours(0); day.setMinutes(0); day.setSeconds(0); day.setMilliseconds(0);
@@ -177,14 +177,14 @@ export class CalendarioComponent implements OnInit {
       this.monthlyEvents.delete(day.getTime());
       // @ts-ignore
       this.monthlyEvents.set(day.getTime(),events.filter(e => e.originalEvent.id !== event.originalEvent.id));
-      return true;
+      this.toastMessage = 'Deleted event: '+event.originalEvent.title;
+      this.toastTitle = "Action status"
     }
     else {
       this.toastMessage = 'Failed to delete event: '+event.originalEvent.title;
-      this.toastTitle = "Action failed"
-      this.modalService.open(this.modalInfo);
+      this.toastTitle = "Action status"
     }
-    return false;
+    this.modalService.open(this.modalInfo);
   }
 
   getEventFields = () => {
@@ -196,26 +196,29 @@ export class CalendarioComponent implements OnInit {
     console.log("Recevied", newEventObject)
     if(this.addEvent(eventJsonString, this.addParameters)){
       console.log("ADD SUCCESS")
+      this.toastMessage = 'Added event: '+newEventObject.title;
+      this.toastTitle = "Action status"
     }
     else {
       console.log("ADD FAILED")
       this.toastMessage = 'Failed to add event: '+newEventObject.title;
-      this.toastTitle = "Action failed"
-      this.modalService.open(this.modalInfo);
+      this.toastTitle = "Action status"
     }
+    this.modalService.open(this.modalInfo);
   }
 
   updateEventItem(eventItemAsJsonString: string) {
     let edittedEventJson = JSON.parse(eventItemAsJsonString)
     console.log("RECEIVED EDIT", edittedEventJson);
     if(this.updateEvent(edittedEventJson, this.updateParameters)){
-      console.log("EDIT SUCCESS")
+      this.toastMessage = 'Updated event: '+edittedEventJson.title;
+      this.toastTitle = "Action status"
     }
     else {
       this.toastMessage = 'Failed to update event: '+edittedEventJson.title;
-      this.toastTitle = "Action failed"
-      this.modalService.open(this.modalInfo);
+      this.toastTitle = "Action status"
     }
+    this.modalService.open(this.modalInfo);
   }
 }
 
