@@ -8,30 +8,47 @@
 <ng-template #content let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">{{modalTitle}}</h4>
-    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    <button type="button" class="btn-close" aria-label="Close" (click)="showErrorMessage=false; modal.dismiss('Cross click');"></button>
   </div>
   <div class="modal-body">
-      <div class="form-group" *ngFor="let field of getEventItemFields()">
+      <div>
+        <div *ngIf="stepOfCreation === 1" style="display: flex; justify-content: flex-start">
+          <div style="margin-right: 3vw;">
+            <label class="col-sm-4 col-form-label">Start at</label>
+            <input
+              (change)="showErrorMessage=!validateUserInput()"
+              type="time" matInput name="week" min="01:00" max="23:58" id="startTime" required>
+          </div>
+          <div>
+            <label class="col-sm-4 col-form-label">End at</label>
+            <input
+              (change)="showErrorMessage=!validateUserInput()"
+              type="time" matInput name="week" min="01:01" max="23:59" id="endTime" required>
+          </div>
+        </div>
+        <div *ngIf="showErrorMessage" style="margin-top: 1vh">
+          <p class="text-center text-danger">Event needs to start before finishing!</p>
+        </div>
+      </div>
+
+      <div *ngIf="stepOfCreation===2">
+        <div class="form-group" *ngFor="let field of getEventItemFields()">
           <label class="col-sm-4 col-form-label">{{getFieldName(field.key)}}</label>
           <div class="input-group">
             <input class="form-control"
                    placeholder="{{getPlaceholder(field.key)}}"
                    id="{{field.key}}" type="{{getFieldType(field.value)}}">
           </div>
-      </div>
-      <div style="display: flex; justify-content: flex-start">
-        <div style="margin-right: 3vw;">
-          <label class="col-sm-4 col-form-label">Start at</label>
-          <input type="time" matInput name="week" min="01:00" max="23:58" id="startTime">
         </div>
-        <div>
-          <label class="col-sm-4 col-form-label">End at</label>
-          <input type="time" matInput name="week" min="01:01" max="23:59" id="endTime">
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="showErrorMessage=false; stepOfCreation=1; modal.dismiss()">Close</button>
+          <button type="button" class="btn btn-primary" (click)="tryAndSaveEventItem()">Save</button>
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Close</button>
-        <button type="button" class="btn btn-primary" (click)="tryAndSaveEventItem()">Save</button>
+
+      <div *ngIf="stepOfCreation===1"  class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="showErrorMessage=false; stepOfCreation=1; modal.dismiss()">Close</button>
+        <button type="button" class="btn btn-primary" [disabled]="showErrorMessage || !hasSomeInput" (click)="saveEveStartAndEnd()">Next</button>
       </div>
   </div>
 </ng-template>

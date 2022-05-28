@@ -1,8 +1,6 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
-
 
 @Component({
   selector: 'cda-add-update-modal',
@@ -15,12 +13,16 @@ export class AddUpdateModalComponent implements OnInit{
   @Input() modalTitle: string | undefined;
   @Input() getEventItemFields: any;
   modelObject = {};
+  showErrorMessage = false;
+  stepOfCreation = 1;
+  hasSomeInput = false;
 
   constructor(public modalService: NgbModal) {
   }
 
   ngOnInit(): void {
     this.constructObjectModel();
+    this.showErrorMessage = false;
   }
 
 
@@ -83,11 +85,96 @@ export class AddUpdateModalComponent implements OnInit{
   }
 
   tryAndSaveEventItem() {
+    let newObject = {};
+    this.showErrorMessage=false;
     this.getEventItemFields()
-      .forEach((fieldData: {key: string}) => {
-        console.log(fieldData.key)
-        console.log((<HTMLInputElement> document.getElementById(fieldData.key)).value)
+      .forEach((fieldData: {key: string, value: string}) => {
+        let currentFieldValue = (<HTMLInputElement> document.getElementById(fieldData.key)).value;
+        // @ts-ignore
+        let newValueForField = this.getValueOfElementFromField(fieldData, currentFieldValue, this.modelObject[fieldData.key])
+        // @ts-ignore
+        newObject[fieldData.key] = newValueForField;
+        console.log("field", fieldData.key, newValueForField);
       })
-    console.log((<HTMLInputElement> document.getElementById("startTime")).valueAsDate)
+    // @ts-ignore
+    newObject['startDate'] = this.modelObject['startDate'];
+    // @ts-ignore
+    newObject['endDate'] = this.modelObject['endDate'];
+    console.log('new object', newObject)
+  }
+
+  getValueOfElementFromField(field: {key: string, value: string}, textValue: string, originalValue: string): number | string {
+    if(textValue === '')
+      return field.value === "number" ? Number(originalValue) : originalValue;
+    if(field.value === "number")
+      if(isNaN(Number(textValue)))
+        return -1
+      else
+        return Number(textValue);
+    return textValue;
+  }
+
+  validateUserInput(){
+    this.hasSomeInput = true;
+    let start = (<HTMLInputElement> document.getElementById("startTime")).valueAsDate
+    let end = (<HTMLInputElement> document.getElementById("endTime")).valueAsDate
+    console.log(start, end);
+    // @ts-ignore
+    if(start === null || end === null)
+      return false;
+    // @ts-ignore
+    if(start.getHours() > end.getHours()) {
+      console.log("S hours > E hours", start.getHours(), " ", end.getHours());
+      return false;
+    }
+    else { // @ts-ignore
+      if (start.getHours() === end.getHours()){
+            // @ts-ignore
+        if(start.getMinutes() > end.getMinutes())
+              console.log("S MM > E MM", start.getMinutes(), " ", end.getMinutes())
+              return false;
+          }
+        else { // @ts-ignore
+        if(start.getMinutes() === end.getMinutes() && start.getSeconds() > end.getSeconds()) {
+          console.log("S SS > E SS", start.getSeconds(), " ", end.getSeconds())
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  getFieldValue(field: {key: string, value: "string"}, txtVa: string) : Date | number | string {
+    // @ts-ignore
+    if(field.value === "number")
+      return parseInt(txtVa);
+    // @ts-ignore
+    if(field.value === "date")
+      return new Date(txtVa);
+    return txtVa;
+  }
+
+  eventChange(key: string, $event: Event) {
+    console.log(key)
+    console.log($event)
+  }
+
+  saveEveStartAndEnd() {
+    let today = new Date();
+    let startDate = (<HTMLInputElement> document.getElementById("startTime")).valueAsDate;
+    // @ts-ignore
+    startDate.setFullYear(today.getFullYear(),today.getMonth(), today.getDate());
+    // @ts-ignore
+    startDate.setMinutes(startDate.getMinutes()+startDate.getTimezoneOffset())
+    let endDate = (<HTMLInputElement> document.getElementById("endTime")).valueAsDate;
+    // @ts-ignore
+    endDate.setFullYear(today.getFullYear(),today.getMonth(), today.getDate());
+    // @ts-ignore
+    endDate.setMinutes(endDate.getMinutes()+endDate.getTimezoneOffset())
+    // @ts-ignore
+    this.modelObject['startDate'] = startDate;
+    // @ts-ignore
+    this.modelObject['endDate'] = endDate;
+    this.stepOfCreation = 2;
   }
 }
