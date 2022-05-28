@@ -49,7 +49,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" (click)="showErrorMessage=false; stepOfCreation=1; modal.dismiss()">Close</button>
-          <button type="button" class="btn btn-primary" (click)="tryAndSaveEventItem()">Save</button>
+          <button type="button" class="btn btn-primary" (click)="tryAndSaveEventItem(); modal.dismiss()">Save</button>
         </div>
       </div>
 

@@ -122,26 +122,23 @@ export class AddUpdateModalComponent implements OnInit{
     this.hasSomeInput = true;
     let start = (<HTMLInputElement> document.getElementById("startTime")).valueAsDate
     let end = (<HTMLInputElement> document.getElementById("endTime")).valueAsDate
-    console.log(start, end);
     // @ts-ignore
     if(start === null || end === null)
       return false;
     // @ts-ignore
     if(start.getHours() > end.getHours()) {
-      console.log("S hours > E hours", start.getHours(), " ", end.getHours());
       return false;
     }
     else { // @ts-ignore
-      if (start.getHours() === end.getHours()){
-            // @ts-ignore
-        if(start.getMinutes() > end.getMinutes())
-              console.log("S MM > E MM", start.getMinutes(), " ", end.getMinutes())
-              return false;
-          }
-        else { // @ts-ignore
-        if(start.getMinutes() === end.getMinutes() && start.getSeconds() > end.getSeconds()) {
-          console.log("S SS > E SS", start.getSeconds(), " ", end.getSeconds())
+      if (start.getHours() === end.getHours()) {
+        // @ts-ignore
+        if (start.getMinutes() > end.getMinutes()) {
           return false;
+        }
+        else { // @ts-ignore
+          if(start.getMinutes() === end.getMinutes() && start.getSeconds() > end.getSeconds()) {
+            return false;
+          }
         }
       }
     }
@@ -158,21 +155,15 @@ export class AddUpdateModalComponent implements OnInit{
     return txtVa;
   }
 
-  eventChange(key: string, $event: Event) {
-    console.log(key)
-    console.log($event)
-  }
-
   saveEveStartAndEnd() {
-    let today = new Date();
     let startDate = (<HTMLInputElement> document.getElementById("startTime")).valueAsDate;
     // @ts-ignore
-    startDate.setFullYear(today.getFullYear(),today.getMonth(), today.getDate());
+    startDate.setFullYear(this.dayOfEvent.getFullYear(),this.dayOfEvent.getMonth(), this.dayOfEvent.getDate());
     // @ts-ignore
     startDate.setMinutes(startDate.getMinutes()+startDate.getTimezoneOffset())
     let endDate = (<HTMLInputElement> document.getElementById("endTime")).valueAsDate;
     // @ts-ignore
-    endDate.setFullYear(today.getFullYear(),today.getMonth(), today.getDate());
+    endDate.setFullYear(this.dayOfEvent.getFullYear(),this.dayOfEvent.getMonth(), this.dayOfEvent.getDate());
     // @ts-ignore
     endDate.setMinutes(endDate.getMinutes()+endDate.getTimezoneOffset())
     // @ts-ignore

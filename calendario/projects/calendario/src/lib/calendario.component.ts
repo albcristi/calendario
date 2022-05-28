@@ -41,7 +41,8 @@ import {AddUpdateModalComponent} from "./views/add-modal/add-update-modal.compon
                   <div *ngFor="let eventOfCurrentDay of monthlyEvents.get(getDateAtHourZeroZero(day).getTime())">
                     <cda-calendar-item [eventItem]="eventOfCurrentDay"
                                        [getEventItemFields]="getEventFields"
-                                       (removeEventItem)="removeEventFromMonthlyEvents($event)"></cda-calendar-item>
+                                       (removeEventItem)="removeEventFromMonthlyEvents($event)"
+                                        (editEventItem)="updateEventItem($event)"></cda-calendar-item>
                   </div>
             </div>
           </li>
@@ -144,6 +145,7 @@ export class CalendarioComponent implements OnInit {
     const [year, month] = [this.referenceDay.getFullYear(), this.referenceDay.getMonth()];
     this.referenceDay = new Date(year, month + inc, 1);
     this.calendarDates = this.groupDaysToWeeks(CalendarUtils.getCalendarDays(this.referenceDay));
+    this.monthlyEvents = this.transformReceivedEvents(this.getEvents(this.referenceDay));
   }
 
   removeEventFromMonthlyEvents(event: EventItem): boolean {
@@ -165,9 +167,25 @@ export class CalendarioComponent implements OnInit {
 
   saveNewEventItem(eventJsonString: string) {
     let newEventObject = JSON.parse(eventJsonString);
-    console.log("RECEIVED", newEventObject)
+    console.log("Recevied", newEventObject)
+    if(this.addEvent(eventJsonString, this.addParameters)){
+      console.log("ADD SUCCESS")
+    }
+    else {
+      console.log("ADD FAILED")
+    }
   }
 
+  updateEventItem(eventItemAsJsonString: string) {
+    let edittedEventJson = JSON.parse(eventItemAsJsonString)
+    console.log("RECEIVED EDIT", edittedEventJson);
+    if(this.updateEvent(edittedEventJson, this.updateParameters)){
+      console.log("EDIT SUCCESS")
+    }
+    else {
+      console.log("EDIT FAILED")
+    }
+  }
 }
 
 // add/delete/update provided function has at least two params: item (an envent), callbackFunction

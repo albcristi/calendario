@@ -11,6 +11,7 @@ export class CalendarItemComponent implements OnInit {
   @Input() eventItem: EventItem | undefined;
   @Input() getEventItemFields: any;
   @Output() removeEventItem = new EventEmitter<EventItem>();
+  @Output() editEventItem = new EventEmitter<string>();
 
   constructor() { }
 
@@ -37,7 +38,7 @@ export class CalendarItemComponent implements OnInit {
   }
 
   handleEventEdit(eventAsJsonString: string) {
-    console.log(eventAsJsonString);
+    this.editEventItem.emit(eventAsJsonString);
   }
 
   getDayOfTheEvent(): Date {
