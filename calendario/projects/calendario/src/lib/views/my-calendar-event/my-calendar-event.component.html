@@ -1,2 +1,39 @@
+<svg
+  *ngIf="event!==undefined"
+  (click)="openModal(myEventModal)"
+  xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-lg" viewBox="0 0 16 16">
+  <path d="m9.708 6.075-3.024.379-.108.502.595.108c.387.093.464.232.38.619l-.975 4.577c-.255 1.183.14 1.74 1.067 1.74.72 0 1.554-.332 1.933-.789l.116-.549c-.263.232-.65.325-.905.325-.363 0-.494-.255-.402-.704l1.323-6.208Zm.091-2.755a1.32 1.32 0 1 1-2.64 0 1.32 1.32 0 0 1 2.64 0Z"/>
+</svg>
+
 <ng-template #myEventModal let-modal>
+  <div class="modal-header">
+     <div style="display: flex; justify-content: center">
+       <h4 class="modal-title" id="modal-basic-title">{{getFieldValue('title')}}</h4>
+     </div>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click');"></button>
+  </div>
+  <div class="modal-body">
+    <div style="display: flex; justify-content: space-evenly">
+      <div>
+        <h4>
+          Starting at
+          <small *ngIf="event!==undefined" class="text-muted">{{getTimeOfDate(event.start)}}</small>
+        </h4>
+      </div>
+      <div>
+        <h4>
+          Ending at
+          <small *ngIf="event!==undefined" class="text-muted">{{getTimeOfDate(event.end)}}</small>
+        </h4>
+      </div>
+    </div>
+    <div *ngFor="let eventField of eventFields" style="display: flex; justify-content: center">
+      <h4 *ngIf="eventField !== undefined && eventField.key !== undefined">{{eventField['key']}}</h4>
+      <p *ngIf="eventField !== undefined && eventField.key !== undefined">{{getFieldValue(eventField['key'])}}</p>
+    </div>
+
+    <div style="margin-top: 1vh"  class="modal-footer">
+      <button  type="button" class="btn btn-outline-dark" (click)="modal.dismiss()">Close</button>
+    </div>
+  </div>
 </ng-template>

@@ -3,6 +3,11 @@
     <div>
       {{getTitleMinimized(eventItem?.originalEvent.title)}}
     </div>
+    <cda-my-calendar-event
+      [event]="eventItem"
+      [getEventFields]="getEventItemFields">
+    </cda-my-calendar-event>
+
     <cda-add-update-modal
       [isAdd]="false"
       [getEventItemFields]="getEventItemFields"
