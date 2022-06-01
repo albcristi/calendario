@@ -111,6 +111,11 @@ myAddEvent = (item: any, args: any): any => {
   }
 ```
 
+#### Notice
+It is your duty to handle a logic for when the add shall not be made. We are not handling cases when events overlap (in our example you can see overlapping events)
+, it is at your latitude to handle such cases and assure data integrity. We also put a random id when calling your add function, pay attention to this aspect as it 
+can generate problems in some cases.
+
 ### Deleting an event or `[deleteEvent]="this.myDeleteEvent"`
 
 The logic is similar to the one used for the add event. As a first parameter we need the event that will be deleted, and in case you need some other parameters
@@ -136,3 +141,7 @@ myUpdateEvent = (item: any, args: any): any => {
     return item;
   }
 ```
+
+#### Notice
+It is your duty to handle a logic for when the add shall not be made. We are not handling cases when events overlap (in our example you can see overlapping events)
+, it is at your latitude to handle such cases and assure data integrity.
