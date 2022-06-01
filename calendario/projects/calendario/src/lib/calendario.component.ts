@@ -206,7 +206,7 @@ export class CalendarioComponent implements OnInit {
         events = [event];
       else
         { // @ts-ignore
-          events = [...events|event]
+          events.push(event);
         }
       this.monthlyEvents.set(day.getTime(), events);
       this.toastMessage = 'Added event: '+newEventObject.title;

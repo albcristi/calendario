@@ -35,4 +35,10 @@ export class MyCalendarEventComponent implements OnInit {
       return '---'
     return `${date.getHours()}:${date.getMinutes()}`
   }
+
+  getTitle(eventFieldElement: string | undefined) : string{
+    if(eventFieldElement === undefined)
+      return ''
+    return eventFieldElement.charAt(0).toUpperCase() + eventFieldElement.substr(1, eventFieldElement.length-1);
+  }
 }
