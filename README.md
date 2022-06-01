@@ -6,8 +6,6 @@ FD-CALENDARIO is an Angular calendar library that will make displayig events on 
 
 # Installing fd-calendario
 
----
-
 In order to install fd-calendario please run the following: `npm i fd-calendario`
 
 ### Important notice:
