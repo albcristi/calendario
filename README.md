@@ -97,3 +97,42 @@ We use this in order to know what fields your class has (except startDate and en
     ]
   }
 ```
+
+### Creating an event or `[addEvent]="this.myAddEvent"`   
+
+You need to pass a function that by default has at least one parameter and handles the add of a new event for your part of the application (we only display it!).
+This function returns the newly created event (or null in case of error), stating the status of the operation and in case you need to pass some more parameters, you are required to use `[addParameters]="[1]"`. Our simple example
+for the add operation:
+```typescript
+myAddEvent = (item: any, args: any): any => {
+    console.log('provided add function')
+    console.log(item);
+    return item;
+  }
+```
+
+### Deleting an event or `[deleteEvent]="this.myDeleteEvent"`
+
+The logic is similar to the one used for the add event. As a first parameter we need the event that will be deleted, and in case you need some other parameters
+you pass them using a list of objects (just like in the case of add and update), this is done using `[deleteArguments]="[1]"`. As a return value, a boolean stating
+the success of the operation is passed. Please see the following template:
+
+```typescript
+myDeleteEvent = (item: any, arg1: any): boolean => {
+    console.log('provided delete function')
+    console.log(item);
+    console.log(arg1)
+    return Math.random() > 0.5 // simulate possibility of error
+  }
+```
+
+### Update an event or ` [updateEvent]="this.myUpdateEvent"`
+
+Same logic as the one from add function is applied here. For additional arguments we use ` [updateParameters]="[1]"`. Code sample bellow:
+```typescript
+myUpdateEvent = (item: any, args: any): any => {
+    console.log('provided update function')
+    console.log(item);
+    return item;
+  }
+```
