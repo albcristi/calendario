@@ -64,12 +64,10 @@ export class AddUpdateModalComponent implements OnInit{
 
   openModal(content: any){
     this.modalService.open(content)
-    console.log(this.getEventItemFields())
   }
 
   onSubmit() {
     this.modalService.dismissAll();
-    console.log("CLOSE")
   }
 
   getFieldName(key: string) {
@@ -98,7 +96,6 @@ export class AddUpdateModalComponent implements OnInit{
         let newValueForField = this.getValueOfElementFromField(fieldData, currentFieldValue, this.modelObject[fieldData.key])
         // @ts-ignore
         newObject[fieldData.key] = newValueForField;
-        console.log("field", fieldData.key, newValueForField);
       })
     // @ts-ignore
     newObject['startDate'] = this.modelObject['startDate'];

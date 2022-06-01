@@ -16,7 +16,6 @@ export class CalendarItemComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log(this.eventItem)
   }
 
   getTitleMinimized(title: String) {
